@@ -2,6 +2,8 @@ package io.jcoder.onlineshop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jcoder.onlineshop.dto.ProductRequest;
+import io.jcoder.onlineshop.repository.ProductRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,6 +32,8 @@ class OnlineShopApplicationTests {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private ProductRepository productRepository;
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry properties) {
@@ -44,6 +48,7 @@ class OnlineShopApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(valueAsString))
                 .andExpect(status().isCreated());
+        Assertions.assertEquals(1, productRepository.findAll().size());
     }
 
     private ProductRequest getProductRequest() {
